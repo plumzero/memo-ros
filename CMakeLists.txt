@@ -44,6 +44,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/modules"
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_BIND_GLOBAL_PLACEHOLDERS")
 
 #
+# Boost Required
+#
+find_package(boost REQUIRED)
+include_directories(SYSTEM ${boost_INCLUDE})
+link_directories(${boost_LIBRARY})
+
+#
 # Module Required
 #
 find_package(console_bridge REQUIRED)
@@ -66,9 +73,6 @@ include_directories(SYSTEM ${roscpp_serialization_INCLUDE})
 
 # find_package(pluginlib REQUIRED)
 # include_directories(SYSTEM ${pluginlib_INCLUDE})
-
-find_package(boost REQUIRED)
-include_directories(SYSTEM ${boost_INCLUDE})
 
 find_package(clients REQUIRED)
 include_directories(SYSTEM ${clients_INCLUDE})

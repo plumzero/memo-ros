@@ -4,6 +4,7 @@ find_path(lz4_INCLUDE lz4.h HINTS "${PROJECT_SOURCE_DIR}/include/ros_comm/utilit
 
 if (roslz4_INCLUDE)
   set(roslz4_FOUND TRUE)
+  add_definitions(-D_LZ4)
   message(STATUS "${Green}Found roslz4 include at: ${roslz4_INCLUDE}${Reset}")
   file(GLOB roslz4_SRCS
     ${PROJECT_SOURCE_DIR}/include/ros_comm/utilities/roslz4/src/lz4s.c

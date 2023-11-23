@@ -89,11 +89,9 @@ include_directories(SYSTEM ${xmlrpcpp_b64_INCLUDE})
 
 find_package(bzip2 REQUIRED)
 include_directories(SYSTEM ${bzip2_INCLUDE})
-add_definitions(-D_BZIP2)
 
 find_package(roslz4 REQUIRED)
 include_directories(SYSTEM ${roslz4_INCLUDE} ${lz4_INCLUDE})
-add_definitions(-D_LZ4)
 
 set(ROS_BASE_SRCS
   ${console_bridge_SRCS}

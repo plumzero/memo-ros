@@ -3,6 +3,7 @@ find_path(bzip2_INCLUDE bzlib.h HINTS "${PROJECT_SOURCE_DIR}/include/bzip2" NO_D
 
 if (bzip2_INCLUDE)
   set(BZIP2_FOUND TRUE)
+  add_definitions(-D_BZIP2)
   message(STATUS "${Green}Found bzip2 include at: ${bzip2_INCLUDE}${Reset}")
   set(bzip2_SRCS
     ${PROJECT_SOURCE_DIR}/include/bzip2/blocksort.c

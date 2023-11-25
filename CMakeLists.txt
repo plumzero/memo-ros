@@ -53,6 +53,9 @@ link_directories(${boost_LIBRARY})
 #
 # Module Required
 #
+# find_package(class_loader REQUIRED)
+# include_directories(SYSTEM ${class_loader_INCLUDE})
+
 find_package(console_bridge REQUIRED)
 include_directories(SYSTEM ${console_bridge_INCLUDE})
 
@@ -92,6 +95,18 @@ include_directories(SYSTEM ${bzip2_INCLUDE})
 
 find_package(roslz4 REQUIRED)
 include_directories(SYSTEM ${roslz4_INCLUDE} ${lz4_INCLUDE})
+
+find_package(gpgerror REQUIRED)
+include_directories(SYSTEM ${gpgerror_INCLUDE})
+
+find_package(assuan REQUIRED)
+include_directories(SYSTEM ${assuan_INCLUDE})
+
+find_package(gpgme REQUIRED)
+include_directories(SYSTEM ${gpgme_INCLUDE})
+
+find_package(crypto REQUIRED)
+include_directories(SYSTEM ${crypto_INCLUDE})
 
 set(ROS_BASE_SRCS
   ${console_bridge_SRCS}

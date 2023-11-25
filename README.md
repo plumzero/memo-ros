@@ -1,6 +1,8 @@
 
 *小新总能把豹男带偏。*
 
+*一切都仿佛加速之后的宁静。*
+
 不依赖于环境的源码 ROS 测试环境。
 
 ### 说明
@@ -22,6 +24,9 @@
 - ros: noetic-devel
 - [rosconsole:noetic-devel](https://github.com/ros/rosconsole)
 - [ros_comm_msgs:kinetic-devel](https://github.com/ros/ros_comm_msgs)
+- libgpg-error
+- libassuan
+- gpgme
 
 ### 使用
 

@@ -5,10 +5,12 @@ if (rosbag_INCLUDE)
   set(ROSBAG_FOUND TRUE)
   message(STATUS "${Green}Found rosbag include at: ${rosbag_INCLUDE}${Reset}")
   file(GLOB rosbag_SRCS
+    ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/aes_encryptor.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/bag_player.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/bag.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/buffer.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/chunked_file.cpp
+    ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/gpgme_utils.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/message_instance.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/no_encryptor.cpp
     ${PROJECT_SOURCE_DIR}/include/ros_comm/tools/rosbag_storage/src/query.cpp

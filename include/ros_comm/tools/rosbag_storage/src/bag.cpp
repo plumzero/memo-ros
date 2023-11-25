@@ -30,8 +30,6 @@
 #include "rosbag/query.h"
 #include "rosbag/view.h"
 
-#include "rosbag/no_encryptor.h"
-
 #if defined(_MSC_VER)
   #include <stdint.h> // only on v2010 and later -> is this enough for msvc and linux?
 #else
@@ -44,6 +42,8 @@
 #include <boost/bind/bind.hpp>
 
 #include "console_bridge/console.h"
+#include "rosbag/aes_encryptor.h"
+#include "rosbag/no_encryptor.h"
 
 using std::map;
 using std::priority_queue;
@@ -57,12 +57,12 @@ using ros::Time;
 
 namespace rosbag {
 
-Bag::Bag()// : encryptor_loader_("rosbag_storage", "rosbag::EncryptorBase")
+Bag::Bag() // : encryptor_loader_("rosbag_storage", "rosbag::EncryptorBase")
 {
     init();
 }
 
-Bag::Bag(string const& filename, uint32_t mode)// : encryptor_loader_("rosbag_storage", "rosbag::EncryptorBase")
+Bag::Bag(string const& filename, uint32_t mode) // : encryptor_loader_("rosbag_storage", "rosbag::EncryptorBase")
 {
     init();
     open(filename, mode);
@@ -70,7 +70,7 @@ Bag::Bag(string const& filename, uint32_t mode)// : encryptor_loader_("rosbag_st
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-Bag::Bag(Bag&& other)// : encryptor_loader_("rosbag_storage", "rosbag::EncryptorBase")
+Bag::Bag(Bag&& other) // : encryptor_loader_("rosbag_storage", "rosbag::EncryptorBase")
 {
     init();
     swap(other);
@@ -223,11 +223,13 @@ void Bag::setEncryptorPlugin(std::string const& plugin_name, std::string const& 
     if (!chunks_.empty()) {
         throw BagException("Cannot set encryption plugin after chunks are written");
     }
-    if (plugin_name == std::string("rosbag/NoEncryptor")) {
-        encryptor_ = boost::make_shared<NoEncryptor>(NoEncryptor());
-    } else if (plugin_name == std::string("rosbag/AesCbcEncryptor")) {
-	    // encryptor_ = boost::make_shared<AesCbcEncryptor>(AesCbcEncryptor());
-	}
+    // encryptor_ = encryptor_loader_.createInstance(plugin_name);
+    // modify by liber
+    if (plugin_name == "rosbag/AesCbcEncryptor") {
+        encryptor_ = boost::make_shared<AesCbcEncryptor>();
+    } else {
+        encryptor_ = boost::make_shared<NoEncryptor>();
+    }
     encryptor_->initialize(*this, plugin_param);
 }
 

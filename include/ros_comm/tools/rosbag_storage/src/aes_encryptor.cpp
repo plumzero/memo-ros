@@ -38,9 +38,9 @@
 
 #include <openssl/rand.h>
 
-#include <pluginlib/class_list_macros.hpp>
+// #include <pluginlib/class_list_macros.hpp>
 
-PLUGINLIB_EXPORT_CLASS(rosbag::AesCbcEncryptor, rosbag::EncryptorBase)
+// PLUGINLIB_EXPORT_CLASS(rosbag::AesCbcEncryptor, rosbag::EncryptorBase)
 
 namespace rosbag
 {

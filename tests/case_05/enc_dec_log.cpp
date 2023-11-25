@@ -5,12 +5,12 @@
 
 #include <gpgme.h>
 
-#include "std_msgs/String.h"
-
 #include "rosbag/bag.h"
 #include "rosbag/aes_encryptor.h"
 #include "rosbag/gpgme_utils.h"
 #include "rosbag/view.h"
+
+#include "helper.h"
 
 const char *GPG_KEY_USER = "Foo00";
 const char *GPG_PRIVATE_SUBKEY = "-----BEGIN PGP PRIVATE KEY BLOCK-----\n"
@@ -115,21 +115,29 @@ int main(int argc, char* argv[])
     return -1;
   }
 
+  ros::Time::init();
+
   if (mode == 1) {
     // Write a message to an encrypted bag file
     rosbag::Bag bag(bag_file_name, rosbag::bagmode::Write);
     bag.setEncryptorPlugin("rosbag/AesCbcEncryptor", GPG_KEY_USER);
-    std_msgs::String msg;
-    msg.data = MESSAGE;
-    bag.write(TOPIC_NAME, ros::TIME_MIN, msg);
+    {
+      roslog::detail thelog = genlog(roslog::detail::INFO, __FILE__, __LINE__, "this is an info log");
+      bag.write(TOPIC_NAME, ros::Time::now(), thelog);
+    }
+    {
+      sleep(1);
+      roslog::detail thelog = genlog(roslog::detail::WARN, __FILE__, __LINE__, "this is an error log");
+      bag.write(TOPIC_NAME, ros::Time::now(), thelog);
+    }
     bag.close();
   } else {
-    // Test the message decrypted from the bag file
+    // Test the message decrypted from the bag file;
     rosbag::Bag bag(bag_file_name, rosbag::bagmode::Read);
     rosbag::View view(bag);
-    assert(view.size() == 1u);
-    assert(TOPIC_NAME == view.begin()->getTopic());
-    assert(MESSAGE == view.begin()->instantiate<std_msgs::String>()->data);
+    for (rosbag::View::iterator it = view.begin(); it != view.end(); it++) {
+      print(*it->instantiate<roslog::detail>());
+    }
     bag.close();
   }
 

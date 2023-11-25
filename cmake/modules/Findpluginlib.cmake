@@ -1,5 +1,5 @@
 
-find_path(pluginlib_INCLUDE pluginlib/class_loader.hpp HINTS "${PROJECT_SOURCE_DIR}/include/pluginlib/include" NO_DEFAULT_PATH)
+find_path(pluginlib_INCLUDE pluginlib/class_loader_imp.hpp HINTS "${PROJECT_SOURCE_DIR}/include/pluginlib/include" NO_DEFAULT_PATH)
 
 if (pluginlib_INCLUDE)
   set(PLUGINLIB_FOUND TRUE)

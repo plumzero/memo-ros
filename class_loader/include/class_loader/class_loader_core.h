@@ -1,7 +1,7 @@
 /*
  * Software License Agreement (BSD License)
  *
- * Copyright (c) 2017, Open Source Robotics Foundation, Inc.
+ * Copyright (c) 2018, Open Source Robotics Foundation, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,9 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PLUGINLIB__CLASS_LOADER_H_
-#define PLUGINLIB__CLASS_LOADER_H_
+#ifndef CLASS_LOADER__CLASS_LOADER_CORE_H_
+#define CLASS_LOADER__CLASS_LOADER_CORE_H_
 
-#include "./class_loader.hpp"
+#ifdef _MSC_VER
+#pragma message("Including header <class_loader/class_loader_core.h> is deprecated,")
+#pragma message("include <class_loader/class_loader_core.h> instead.")
+#else
+// *INDENT-OFF* (prevent uncrustify from adding indention below)
+#warning Including header <class_loader/class_loader_core.h> is deprecated, \
+include <class_loader/class_loader_core.hpp> instead.
+#endif
 
-#endif  // PLUGINLIB__CLASS_LOADER_H_
+#include "./class_loader_core.hpp"
+
+#endif  // CLASS_LOADER__CLASS_LOADER_CORE_H_

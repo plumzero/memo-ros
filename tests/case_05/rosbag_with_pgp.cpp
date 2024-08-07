@@ -12,6 +12,8 @@
 
 #include "helper.h"
 
+// 说明: 根据私钥文件导出一份公钥文件，使公私钥文件分开。加密时导入公钥文件，私钥时导入私钥文件
+
 const char *GPG_KEY_USER = "Foo00";
 const char *GPG_PRIVATE_SUBKEY = "-----BEGIN PGP PRIVATE KEY BLOCK-----\n"
   "Version: GnuPG v1\n\n"
@@ -56,13 +58,49 @@ const char *GPG_PRIVATE_SUBKEY = "-----BEGIN PGP PRIVATE KEY BLOCK-----\n"
   "LYxADpgShsNtJiU/Dbn8jA+BlK/77fGnkvnc"
   "=YcIw"
   "-----END PGP PRIVATE KEY BLOCK-----";
-const char *MESSAGE = "message foo";
+const char* GPG_PUBLIC_SUBKEY = "-----BEGIN PGP PUBLIC KEY BLOCK-----\n"
+"Version: GnuPG v1\n\n"
+"mQENBFn3acoBCACwhq4iofk2V3/4yQy9++pHa3D4SPJdt1G/h83D+t9m95FoTHZl"
+"zIY5bjKAKQ+NI6u5eQKNndAA7QLg8UGML6VqO7wmlxYSMOqRc4i0QMuUTA87hK4u"
+"ozcHnjwaRhQzapwhnAMUu4058DIUyTus7ugD81C6y0nNT2PPwQzKifMmMcIgBvKm"
+"vio7IK1A2tOsyQJD3jo99ZQhxq/eOQIwCs/BZfxu0OWnSJkx98Rsf7w3GC8tqhWK"
+"avt/rBaFVoS3eZMkgQfT/ep92dYSLi/3/1pMtAt3kEVw3ZrvrCi47KDhpuaIV0kI"
+"WlfHJF/YBNFbe4rRNwmQ5PkZYW1IwR14A+QFABEBAAG0KkZvbzAwIChBIEdQRyBr"
+"ZXkgZm9yIHRlc3QgY2FzZXMpIDxiYXJAYmF6PokBOAQTAQIAIgUCWfdpygIbAwYL"
+"CQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQrz4fCIDvCM1kyQf/XTzvAa6V7Zv7"
+"aLGhiRR0/BQ7eD3qwqCg+kqio+hw60lPLYFIfqi3fktUpGfWYPsi6nHAk3lIONFx"
+"L3Cnk6G/IVm0zCnZdXIozNYyQgFE3vc2Xe1ER6BJDVnRIAP7GgmVI0w3iJmDXL7/"
+"d0orCpXX+IHeu75AREweJBGO7+xBNmE4Htdktb3ff/UWumUJ/6iUoWj32eUXy9RR"
+"HsUFvodvm36cVvno/7NrjNOQHRDJphg2klaYpqTw5HxdmF+BEjO3JX0M59bAslXh"
+"0FmL7xBUwoXT5SEfoDGVIVvionBKirAg5Xof450hvzqFWUJM3nOirc5bOzTvn6iK"
+"hQy6zQVjE7kBDQRZ92nKAQgApcEchZniJKHK56HYqlYqqBmgTzq8IdjU2j76Iop8"
+"GMKlG/U8p7K6LBGU348X8wwWsBRv57gQe8tC4UGCSiBFunSgU9x0XoXYc34WRGhh"
+"i8FsQqqucssA7dCVq0/dgV/Ic8MSqrkbN38pxRrlvWBuaXUP8AtzWo+Ll4OUMucC"
+"WdLaovwIjCGU2RlwXP5z+6z+7K8rtwWAF0j53cdZmWG0lNSubwS93xZAwJKJ/vnL"
+"xdfuQ/QKMtbpFZmJ+XxIQeBqGcCRGArYGKH2ORcG2+zbBh6qywVILz8A+ZIWUNPd"
+"q1xGD6pGKye70V9/y3TuIJibqQ9XtVNrEQToMw/z38NeRQARAQABiQEfBBgBAgAJ"
+"BQJZ92nKAhsMAAoJEK8+HwiA7wjN3YgH+wU1PH/eXiZf01S/JOkSFcqx62LsmdyP"
+"FluVRNXkwnXniet9vbBdzzU6Y+YQO0TQ/FONhVqwEPeVk3IuCXD2Q+lLmpldTyQ7"
+"gPqQ2NGF2Ap38ao0dKhTUuq61T+dslzkfcC0YwuGDgB9r3GxghFyzOC3JYFtgInU"
+"yGQFpE4BjjZXM7I6LrOkc6ydAffEaU50Fgt4i9K0JU/heYfD8xzHstWch/HjwwXF"
+"UPDWIOJl6PQrdw7bg151IKDMlRVlDkrh9NK7bGrWMPnOBZn8i7w+8CXmyQrOAHYe"
+"kNXEgxUAQu/FoyAqHdItjEAOmBKGw20mJT8NufyMD4GUr/vt8aeS+dw="
+"=6QNc"
+"-----END PGP PUBLIC KEY BLOCK-----";
+
+// const char *MESSAGE = "message foo";
 const char *TOPIC_NAME = "topic_bar";
 
-void importGpgKey(gpgme_ctx_t &ctx)
+void importGpgKey(gpgme_ctx_t &ctx, int mode)
 {
   gpgme_data_t key_data;
-  gpgme_error_t err = gpgme_data_new_from_mem(&key_data, GPG_PRIVATE_SUBKEY, std::strlen(GPG_PRIVATE_SUBKEY), 1);
+  gpgme_error_t err;
+  
+  if (mode == 1) {
+    err = gpgme_data_new_from_mem(&key_data, GPG_PRIVATE_SUBKEY, std::strlen(GPG_PRIVATE_SUBKEY), 1);
+  } else {
+    err = gpgme_data_new_from_mem(&key_data, GPG_PUBLIC_SUBKEY, std::strlen(GPG_PUBLIC_SUBKEY), 1);
+  }
   if (err) {
     gpgme_release(ctx);
     std::cout << "gpgme_data_new_from_mem returned " << gpgme_strerror(err);
@@ -102,7 +140,7 @@ int main(int argc, char* argv[])
     std::cout << "Failed to create a GPG context: " << gpgme_strerror(err);
     return -1;
   }
-  importGpgKey(ctx);
+  importGpgKey(ctx, mode);
 
   // Test if the key has been imported
   gpgme_key_t key;
@@ -126,8 +164,7 @@ int main(int argc, char* argv[])
       bag.write(TOPIC_NAME, ros::Time::now(), thelog);
     }
     {
-      sleep(1);
-      roslog::detail thelog = genlog(roslog::detail::WARN, __FILE__, __LINE__, "this is an error log");
+      roslog::detail thelog = genlog(roslog::detail::WARN, __FILE__, __LINE__, "this is an warn log");
       bag.write(TOPIC_NAME, ros::Time::now(), thelog);
     }
     bag.close();

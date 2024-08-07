@@ -28,6 +28,9 @@
 - libassuan
 - gpgme
 
+- [gpg的使用](docs/gpg.md)
+- [pgp依赖库](docs/dependency.md)
+
 ### 使用
 
 ```s
@@ -55,4 +58,4 @@ ROS 网络通信时的环境变量 `ROST_MASTER_URI` 和 `ROS_HOSTNAME`。也可
 
 ### 问题
 
-- [关于压缩](关于压缩.md)
+- [关于压缩](docs/关于压缩.md)

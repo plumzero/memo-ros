@@ -21,8 +21,7 @@ int main()
   }
 
   {
-    sleep(1);
-    roslog::detail thelog = genlog(roslog::detail::WARN, __FILE__, __LINE__, "this is an error log");
+    roslog::detail thelog = genlog(roslog::detail::WARN, __FILE__, __LINE__, "this is an warn log");
     bag.write(TOPIC_NAME, ros::Time::now(), thelog);
   }
   
